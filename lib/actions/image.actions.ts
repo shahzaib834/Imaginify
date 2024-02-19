@@ -9,27 +9,13 @@ import { redirect } from 'next/navigation';
 
 import { v2 as cloudinary } from 'cloudinary';
 
-const populateUser = (query: any) =>
-  query.populate({
-    path: 'author',
-    model: User,
-    select: '_id firstName lastName clerkId',
-  });
-
 // ADD IMAGE
 export async function addImage({ image, userId, path }: AddImageParams) {
   try {
     await connectToDatabase();
 
-    const author = await User.findById(userId);
-
-    if (!author) {
-      throw new Error('User not found');
-    }
-
     const newImage = await Image.create({
       ...image,
-      author: author._id,
     });
 
     revalidatePath(path);
@@ -83,7 +69,7 @@ export async function getImageById(imageId: string) {
   try {
     await connectToDatabase();
 
-    const image = await populateUser(Image.findById(imageId));
+    const image = await Image.findById(imageId);
 
     if (!image) throw new Error('Image not found');
 
@@ -137,7 +123,7 @@ export async function getAllImages({
 
     const skipAmount = (Number(page) - 1) * limit;
 
-    const images = await populateUser(Image.find(query))
+    const images = await Image.find(query)
       .sort({ updatedAt: -1 })
       .skip(skipAmount)
       .limit(limit);
@@ -149,37 +135,6 @@ export async function getAllImages({
       data: JSON.parse(JSON.stringify(images)),
       totalPage: Math.ceil(totalImages / limit),
       savedImages,
-    };
-  } catch (error) {
-    handleError(error);
-  }
-}
-
-// GET IMAGES BY USER
-export async function getUserImages({
-  limit = 9,
-  page = 1,
-  userId,
-}: {
-  limit?: number;
-  page: number;
-  userId: string;
-}) {
-  try {
-    await connectToDatabase();
-
-    const skipAmount = (Number(page) - 1) * limit;
-
-    const images = await populateUser(Image.find({ author: userId }))
-      .sort({ updatedAt: -1 })
-      .skip(skipAmount)
-      .limit(limit);
-
-    const totalImages = await Image.find({ author: userId }).countDocuments();
-
-    return {
-      data: JSON.parse(JSON.stringify(images)),
-      totalPages: Math.ceil(totalImages / limit),
     };
   } catch (error) {
     handleError(error);

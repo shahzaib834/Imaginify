@@ -1,13 +1,13 @@
 'use client';
+
 import { navLinks } from '@/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
-import { Button } from '../ui/button';
 
 const Sidebar = () => {
   const pathname = usePathname();
+
   return (
     <aside className='sidebar'>
       <div className='flex size-full flex-col gap-4'>
@@ -21,7 +21,6 @@ const Sidebar = () => {
         </Link>
 
         <nav className='sidebar-nav'>
-          {/* The following section is only visible if the user is signed in*/}
           <div>
             <ul className='sidebar-nav_elements'>
               {navLinks.slice(0, 6).map((link) => {
