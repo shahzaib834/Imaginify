@@ -3,7 +3,6 @@ import React from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Link from 'next/link';
 import Image from 'next/image';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { navLinks } from '@/constants';
 import { usePathname } from 'next/navigation';
 import { Button } from '../ui/button';
@@ -22,9 +21,7 @@ const MobileNav = () => {
       </Link>
 
       <nav className='flex gap-2'>
-        <SignedIn>
-          <UserButton afterSignOutUrl='/' />
-
+        <div>
           <Sheet>
             <SheetTrigger>
               <Image
@@ -74,13 +71,7 @@ const MobileNav = () => {
               </>
             </SheetContent>
           </Sheet>
-        </SignedIn>
-
-        <SignedOut>
-          <Button asChild className='button bg-purple-gradient bg-cover'>
-            <Link href='/sign-in'>Login</Link>
-          </Button>
-        </SignedOut>
+        </div>
       </nav>
     </header>
   );

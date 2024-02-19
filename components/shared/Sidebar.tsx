@@ -1,6 +1,5 @@
 'use client';
 import { navLinks } from '@/constants';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -23,7 +22,7 @@ const Sidebar = () => {
 
         <nav className='sidebar-nav'>
           {/* The following section is only visible if the user is signed in*/}
-          <SignedIn>
+          <div>
             <ul className='sidebar-nav_elements'>
               {navLinks.slice(0, 6).map((link) => {
                 const isActive = link.route === pathname;
@@ -78,17 +77,8 @@ const Sidebar = () => {
                   </li>
                 );
               })}
-              <li className='flex-center cursor-pointer gap-2 p-4'>
-                <UserButton afterSignOutUrl='/' showName />
-              </li>
             </ul>
-          </SignedIn>
-
-          <SignedOut>
-            <Button asChild className='button bg-purple-gradient bg-cover'>
-              <Link href='/sign-in'>Login</Link>
-            </Button>
-          </SignedOut>
+          </div>
         </nav>
       </div>
     </aside>
